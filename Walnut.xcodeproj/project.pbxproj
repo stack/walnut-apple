@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DC8CB4942858FC130016FC5F /* Application.mm in Sources */ = {isa = PBXBuildFile; fileRef = DC8CB4932858FC130016FC5F /* Application.mm */; };
+		DC8B6999285B6F1300DB13EF /* MetalCpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8B6998285B6F1300DB13EF /* MetalCpp.cpp */; };
+		DC8CB4942858FC130016FC5F /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8CB4932858FC130016FC5F /* Application.cpp */; };
 		DC8CB496285905E60016FC5F /* WalnutApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8CB495285905E60016FC5F /* WalnutApp.cpp */; };
 		DC8CB499285907F60016FC5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8CB498285907F60016FC5F /* Foundation.framework */; };
 		DC8CB49C285907FE0016FC5F /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8CB49A285907FE0016FC5F /* Metal.framework */; };
@@ -36,13 +37,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DC8B6998285B6F1300DB13EF /* MetalCpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalCpp.cpp; sourceTree = "<group>"; };
 		DC8CB46D2858D8310016FC5F /* libWalnut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libWalnut.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC8CB4772858D8AA0016FC5F /* WalnutApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalnutApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC8CB4862858D8B00016FC5F /* WalnutApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WalnutApp.entitlements; sourceTree = "<group>"; };
 		DC8CB4902858F9610016FC5F /* EntryPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EntryPoint.h; sourceTree = "<group>"; };
 		DC8CB4912858FA3C0016FC5F /* Layer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Layer.h; sourceTree = "<group>"; };
 		DC8CB4922858FA8C0016FC5F /* Application.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
-		DC8CB4932858FC130016FC5F /* Application.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Application.mm; sourceTree = "<group>"; };
+		DC8CB4932858FC130016FC5F /* Application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		DC8CB495285905E60016FC5F /* WalnutApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WalnutApp.cpp; sourceTree = "<group>"; };
 		DC8CB498285907F60016FC5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DC8CB49A285907FE0016FC5F /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
@@ -111,9 +113,10 @@
 			isa = PBXGroup;
 			children = (
 				DC8CB4922858FA8C0016FC5F /* Application.h */,
-				DC8CB4932858FC130016FC5F /* Application.mm */,
+				DC8CB4932858FC130016FC5F /* Application.cpp */,
 				DC8CB4902858F9610016FC5F /* EntryPoint.h */,
 				DC8CB4912858FA3C0016FC5F /* Layer.h */,
+				DC8B6998285B6F1300DB13EF /* MetalCpp.cpp */,
 			);
 			path = Walnut;
 			sourceTree = "<group>";
@@ -264,8 +267,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC8CB4942858FC130016FC5F /* Application.mm in Sources */,
+				DC8CB4942858FC130016FC5F /* Application.cpp in Sources */,
 				DC8CB4AA285918270016FC5F /* imgui.cpp in Sources */,
+				DC8B6999285B6F1300DB13EF /* MetalCpp.cpp in Sources */,
 				DC8CB4A9285918230016FC5F /* imgui_impl_osx.mm in Sources */,
 				DC8CB4B22859187F0016FC5F /* imgui_widgets.cpp in Sources */,
 				DC8CB4B02859187F0016FC5F /* imgui_draw.cpp in Sources */,
@@ -314,7 +318,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -351,6 +355,8 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
+					"IMGUI_IMPL_METAL_CPP=1",
+					"IMGUI_IMPL_METAL_CPP_EXTENSIONS=1",
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -382,7 +388,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -415,6 +421,10 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"IMGUI_IMPL_METAL_CPP=1",
+					"IMGUI_IMPL_METAL_CPP_EXTENSIONS=1",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

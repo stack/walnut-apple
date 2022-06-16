@@ -11,8 +11,6 @@
 #include <backends/imgui_impl_metal.h>
 #include <backends/imgui_impl_osx.h>
 
-#include <MetalKit/MetalKit.h>
-
 extern bool IsApplicationRunning;
 
 static std::vector<std::vector<std::function<void()>>> ResourceFreeQueue;
@@ -76,8 +74,8 @@ namespace Walnut {
         NS::MenuItem *appMenuItem = NS::MenuItem::alloc()->init();
         NS::Menu *appMenu = NS::Menu::alloc()->init(NS::String::string("Appname", UTF8StringEncoding));
 
-        NS::String* appName = NS::RunningApplication::currentApplication()->localizedName();
-        NS::String* quitItemName = NS::String::string("Quit", UTF8StringEncoding)->stringByAppendingString(appName);
+        NS::String* appName = NS::String::string(specification.Name.c_str(), UTF8StringEncoding);
+        NS::String* quitItemName = NS::String::string("Quit ", UTF8StringEncoding)->stringByAppendingString(appName);
         SEL quitCallback = NS::MenuItem::registerActionCallback("appQuit", [](void*,SEL,const NS::Object* sender) {
             // TODO: How to I break the run loop here properly
             auto app = NS::Application::sharedApplication();
@@ -159,8 +157,8 @@ namespace Walnut {
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 
-        ImGui_ImplMetal_Init((__bridge id<MTLDevice>)device);
-        ImGui_ImplOSX_Init((__bridge NSView*)metalView);
+        ImGui_ImplMetal_Init(device);
+        ImGui_ImplOSX_Init(metalView);
 
         window->makeKeyAndOrderFront(nullptr);
 
@@ -179,13 +177,11 @@ namespace Walnut {
     void Application::drawInMTKView(MTK::View* view) {
         NS::AutoreleasePool* autoreleasePool = NS::AutoreleasePool::alloc()->init();
 
-        auto metalView = (__bridge MTKView*)view;
-
         MTL::CommandBuffer* commandBuffer = commandQueue->commandBuffer();
         MTL::RenderPassDescriptor* renderPassDescriptor = view->currentRenderPassDescriptor();
         MTL::RenderCommandEncoder* encoder = commandBuffer->renderCommandEncoder(renderPassDescriptor);
 
-        ImGui_ImplMetal_NewFrame((__bridge MTLRenderPassDescriptor*)renderPassDescriptor);
+        ImGui_ImplMetal_NewFrame(renderPassDescriptor);
         ImGui_ImplOSX_NewFrame(metalView);
         ImGui::NewFrame();
 
@@ -230,7 +226,7 @@ namespace Walnut {
         ImDrawData* mainDrawData = ImGui::GetDrawData();
         
         encoder->pushDebugGroup(NS::String::string("Dear ImGui rendering", NS::StringEncoding::UTF8StringEncoding));
-        ImGui_ImplMetal_RenderDrawData(mainDrawData, (__bridge id<MTLCommandBuffer>)commandBuffer, (__bridge id<MTLRenderCommandEncoder>)encoder);
+        ImGui_ImplMetal_RenderDrawData(mainDrawData, commandBuffer, encoder);
         encoder->popDebugGroup();
 
         encoder->endEncoding();
