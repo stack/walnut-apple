@@ -33,10 +33,13 @@ namespace Walnut {
 
         ViewDelegate(MTL::Device* device);
 
+        virtual void drawableSizeWillChange(MTK::View* view, CGSize size) override;
         virtual void drawInMTKView(MTK::View* view) override;
 
     private:
 
+        CGSize viewSize;
+        
         MTL::Device* device;
         MTL::CommandQueue* commandQueue;
 
