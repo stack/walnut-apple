@@ -15,7 +15,9 @@ extern bool IsApplicationRunning;
 
 static std::vector<std::vector<std::function<void()>>> ResourceFreeQueue;
 
+static const int MaxFramesInFlight = 3;
 static uint32_t CurrentFrameIndex = 0;
+static MTL::Device* MetalDevice = nullptr;
 
 namespace Walnut {
 
@@ -32,11 +34,17 @@ namespace Walnut {
         commandQueue->release();
         metalView->release();
         window->release();
-        device->release();
+    }
+
+    MTL::Device* Application::GetDevice() {
+        return MetalDevice;
     }
 
     void Application::Init() {
         autoreleasePool = NS::AutoreleasePool::alloc()->init();
+        commandSemaphore = dispatch_semaphore_create(MaxFramesInFlight);
+        
+        ResourceFreeQueue.resize(MaxFramesInFlight);
     }
 
     void Application::Shutdown() {
@@ -129,10 +137,10 @@ namespace Walnut {
             false
         );
 
-        device = MTL::CreateSystemDefaultDevice();
-        commandQueue = device->newCommandQueue();
+        MetalDevice = MTL::CreateSystemDefaultDevice();
+        commandQueue = MetalDevice->newCommandQueue();
 
-        metalView = MTK::View::alloc()->init(frame, device);
+        metalView = MTK::View::alloc()->init(frame, MetalDevice);
         metalView->setColorPixelFormat((MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB));
         metalView->setClearColor(MTL::ClearColor::Make(1.0, 0.0, 0.0, 1.0));
 
@@ -157,7 +165,7 @@ namespace Walnut {
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 
-        ImGui_ImplMetal_Init(device);
+        ImGui_ImplMetal_Init(MetalDevice);
         ImGui_ImplOSX_Init(metalView);
 
         window->makeKeyAndOrderFront(nullptr);
@@ -176,8 +184,23 @@ namespace Walnut {
 
     void Application::drawInMTKView(MTK::View* view) {
         NS::AutoreleasePool* autoreleasePool = NS::AutoreleasePool::alloc()->init();
+        
+        CurrentFrameIndex = (CurrentFrameIndex + 1) % MaxFramesInFlight;
 
         MTL::CommandBuffer* commandBuffer = commandQueue->commandBuffer();
+        
+        int thisFrameIndex = CurrentFrameIndex;
+        dispatch_semaphore_wait(commandSemaphore, DISPATCH_TIME_FOREVER);
+        commandBuffer->addCompletedHandler(^void(MTL::CommandBuffer* commandBuffer) {
+            dispatch_semaphore_signal(commandSemaphore);
+            
+            for (auto& func : ResourceFreeQueue[thisFrameIndex]) {
+                func();
+            }
+            
+            ResourceFreeQueue[thisFrameIndex].clear();
+        });
+        
         MTL::RenderPassDescriptor* renderPassDescriptor = view->currentRenderPassDescriptor();
         MTL::RenderCommandEncoder* encoder = commandBuffer->renderCommandEncoder(renderPassDescriptor);
 

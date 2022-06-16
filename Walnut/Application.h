@@ -32,6 +32,8 @@ namespace Walnut {
         // Application Methods
         Application(const ApplicationSpecification& applicationSpecification);
         ~Application();
+        
+        static MTL::Device* GetDevice();
 
         void Run();
         void SetMenubarCallback(const std::function<void()>& callback) { menubarCallback = callback; }
@@ -78,7 +80,7 @@ namespace Walnut {
         MTK::View* metalView;
         CGSize viewSize;
         
-        MTL::Device* device;
+        dispatch_semaphore_t commandSemaphore;
         MTL::CommandQueue* commandQueue;
     };
 
