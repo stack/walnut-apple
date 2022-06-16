@@ -17,14 +17,27 @@
 #include <Walnut/Application.h>
 #include <Walnut/EntryPoint.h>
 
+#include <imgui.h>
+
+class ExampleLayer : public Walnut::Layer
+{
+public:
+
+    virtual void OnUIRender() override {
+        ImGui::Begin("Hello");
+        ImGui::Button("Button");
+        ImGui::End();
+
+        ImGui::ShowDemoWindow();
+    }
+};
+
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv) {
     Walnut::ApplicationSpecification spec;
     spec.Name = "Walnut Example";
 
     Walnut::Application* app = new Walnut::Application(spec);
-
-    // TODO: Push a layer
-    // app->PushLayer<ExampleLayer>();
+    app->PushLayer<ExampleLayer>();
 
     // TODO: Figure out the difference in the menu bar items
     // app->SetMenubarCallback(…);

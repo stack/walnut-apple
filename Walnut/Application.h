@@ -26,50 +26,10 @@ namespace Walnut {
         uint32_t Height = 900;
     };
 
-    class ViewDelegate : public MTK::ViewDelegate {
+    class Application : public NS::ApplicationDelegate, public MTK::ViewDelegate {
 
     public:
-        virtual ~ViewDelegate() override;
-
-        ViewDelegate(MTL::Device* device);
-
-        virtual void drawableSizeWillChange(MTK::View* view, CGSize size) override;
-        virtual void drawInMTKView(MTK::View* view) override;
-
-    private:
-
-        CGSize viewSize;
-        
-        MTL::Device* device;
-        MTL::CommandQueue* commandQueue;
-
-    };
-
-    class ApplicationDelegate : public NS::ApplicationDelegate {
-
-    public:
-        ApplicationDelegate(const ApplicationSpecification& applicationSpecification);
-        ~ApplicationDelegate();
-
-        NS::Menu* CreateMenuBar();
-
-        virtual void applicationWillFinishLaunching(NS::Notification* notification) override;
-        virtual void applicationDidFinishLaunching(NS::Notification* notification) override;
-        virtual bool applicationShouldTerminateAfterLastWindowClosed(NS::Application* sender) override;
-
-    private:
-
-        ApplicationSpecification specification;
-
-        NS::Window* window;
-        MTK::View* metalView;
-        MTL::Device* metalDevice;
-        Walnut::ViewDelegate* viewDelegate = nullptr;
-    };
-
-    class Application {
-
-    public:
+        // Application Methods
         Application(const ApplicationSpecification& applicationSpecification);
         ~Application();
 
@@ -88,20 +48,38 @@ namespace Walnut {
 
         static void SubmitResourceFree(std::function<void()>&& func);
 
-    private:
+        // ApplicationDelegate Protocol
+        virtual void applicationWillFinishLaunching(NS::Notification* notification) override;
+        virtual void applicationDidFinishLaunching(NS::Notification* notification) override;
+        virtual bool applicationShouldTerminateAfterLastWindowClosed(NS::Application* sender) override;
 
+        // MTKViewDelegate Protocol
+        virtual void drawableSizeWillChange(MTK::View* view, CGSize size) override;
+        virtual void drawInMTKView(MTK::View* view) override;
+
+    private:
+        // Application Methods
         void Init();
         void Shutdown();
+
+        // ApplicationDelegate Protocol
+        NS::Menu* CreateMenuBar();
 
     private:
 
         ApplicationSpecification specification;
 
         NS::AutoreleasePool* autoreleasePool;
-        ApplicationDelegate* appDelegate;
 
         std::vector<std::shared_ptr<Layer>> layerStack;
         std::function<void()> menubarCallback;
+
+        NS::Window* window;
+        MTK::View* metalView;
+        CGSize viewSize;
+        
+        MTL::Device* device;
+        MTL::CommandQueue* commandQueue;
     };
 
     Application* CreateApplication(int argc, char** argv);

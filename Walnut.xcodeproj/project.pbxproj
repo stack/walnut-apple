@@ -496,6 +496,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)",
+					"$(SRCROOT)/Third-Party/imgui",
 					"$(SRCROOT)/Third-Party/metal-cpp",
 					"$(SRCROOT)/Third-Party/metal-cpp-extensions",
 				);
@@ -573,6 +574,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)",
+					"$(SRCROOT)/Third-Party/imgui",
 					"$(SRCROOT)/Third-Party/metal-cpp",
 					"$(SRCROOT)/Third-Party/metal-cpp-extensions",
 				);

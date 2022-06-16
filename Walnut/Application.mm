@@ -22,18 +22,23 @@ static uint32_t CurrentFrameIndex = 0;
 namespace Walnut {
 
     Application::Application(const ApplicationSpecification& applicationSpecification) :
-        specification(applicationSpecification)
+        specification(applicationSpecification),
+        viewSize({ 0.0, 0.0 })
     {
         Init();
     }
 
     Application::~Application() {
         Shutdown();
+
+        commandQueue->release();
+        metalView->release();
+        window->release();
+        device->release();
     }
 
     void Application::Init() {
         autoreleasePool = NS::AutoreleasePool::alloc()->init();
-        appDelegate = new ApplicationDelegate(specification);
     }
 
     void Application::Shutdown() {
@@ -43,8 +48,6 @@ namespace Walnut {
 
         layerStack.clear();
 
-        delete appDelegate;
-
         autoreleasePool->release();
 
         IsApplicationRunning = false;
@@ -52,7 +55,7 @@ namespace Walnut {
 
     void Application::Run() {
         NS::Application* sharedApplication = NS::Application::sharedApplication();
-        sharedApplication->setDelegate(appDelegate);
+        sharedApplication->setDelegate(this);
         sharedApplication->run();
     }
 
@@ -66,20 +69,7 @@ namespace Walnut {
         ResourceFreeQueue[CurrentFrameIndex].emplace_back(func);
     }
 
-    ApplicationDelegate::ApplicationDelegate(const ApplicationSpecification &applicationSpecification) :
-        specification(applicationSpecification)
-    {
-
-    }
-
-    ApplicationDelegate::~ApplicationDelegate() {
-        metalView->release();
-        window->release();
-        metalDevice->release();
-        delete viewDelegate;
-    }
-
-    NS::Menu* ApplicationDelegate::CreateMenuBar() {
+    NS::Menu* Application::CreateMenuBar() {
         using NS::StringEncoding::UTF8StringEncoding;
 
         NS::Menu* mainMenu = NS::Menu::alloc()->init();
@@ -123,7 +113,7 @@ namespace Walnut {
         return mainMenu->autorelease();
     }
 
-    void ApplicationDelegate::applicationWillFinishLaunching(NS::Notification* notification) {
+    void Application::applicationWillFinishLaunching(NS::Notification* notification) {
         NS::Menu *menu = CreateMenuBar();
 
         NS::Application* app = reinterpret_cast<NS::Application*>(notification->object());
@@ -131,7 +121,7 @@ namespace Walnut {
         app->setActivationPolicy(NS::ActivationPolicy::ActivationPolicyRegular);
     }
 
-    void ApplicationDelegate::applicationDidFinishLaunching(NS::Notification* notification) {
+    void Application::applicationDidFinishLaunching(NS::Notification* notification) {
         CGRect frame = (CGRect){ { 100.0, 100.0 }, { static_cast<CGFloat>(specification.Width), static_cast<CGFloat>(specification.Height) } };
 
         window = NS::Window::alloc()->init(
@@ -141,14 +131,14 @@ namespace Walnut {
             false
         );
 
-        metalDevice = MTL::CreateSystemDefaultDevice();
+        device = MTL::CreateSystemDefaultDevice();
+        commandQueue = device->newCommandQueue();
 
-        metalView = MTK::View::alloc()->init(frame, metalDevice);
+        metalView = MTK::View::alloc()->init(frame, device);
         metalView->setColorPixelFormat((MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB));
         metalView->setClearColor(MTL::ClearColor::Make(1.0, 0.0, 0.0, 1.0));
 
-        viewDelegate = new Walnut::ViewDelegate(metalDevice);
-        metalView->setDelegate(viewDelegate);
+        metalView->setDelegate(this);
 
         window->setContentView(metalView);
         window->setTitle(NS::String::string(specification.Name.c_str(), NS::StringEncoding::UTF8StringEncoding));
@@ -169,7 +159,7 @@ namespace Walnut {
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 
-        ImGui_ImplMetal_Init((__bridge id<MTLDevice>)metalDevice);
+        ImGui_ImplMetal_Init((__bridge id<MTLDevice>)device);
         ImGui_ImplOSX_Init((__bridge NSView*)metalView);
 
         window->makeKeyAndOrderFront(nullptr);
@@ -178,28 +168,15 @@ namespace Walnut {
         app->activateIgnoringOtherApps(true);
     }
 
-    bool ApplicationDelegate::applicationShouldTerminateAfterLastWindowClosed(NS::Application* sender) {
+    bool Application::applicationShouldTerminateAfterLastWindowClosed(NS::Application* sender) {
         return true;
     }
 
-    ViewDelegate::ViewDelegate(MTL::Device* device) :
-        MTK::ViewDelegate(),
-        device(device->retain()),
-        viewSize({ 0.0, 0.0 })
-    {
-        commandQueue = device->newCommandQueue();
-    }
-
-    ViewDelegate::~ViewDelegate() {
-        commandQueue->release();
-        device->release();
-    }
-
-    void ViewDelegate::drawableSizeWillChange(MTK::View* view, CGSize size) {
+    void Application::drawableSizeWillChange(MTK::View* view, CGSize size) {
         viewSize = size;
     }
 
-    void ViewDelegate::drawInMTKView(MTK::View* view) {
+    void Application::drawInMTKView(MTK::View* view) {
         NS::AutoreleasePool* autoreleasePool = NS::AutoreleasePool::alloc()->init();
 
         auto metalView = (__bridge MTKView*)view;
@@ -243,10 +220,9 @@ namespace Walnut {
             ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), dockspaceFlags);
         }
 
-        // TODO: Render layers
-        // for (auto& layer : layerStack) {
-        //     layer->OnUIRender();
-        // }
+        for (auto& layer : layerStack) {
+            layer->OnUIRender();
+        }
 
         ImGui::End(); // Dockspace end
 
