@@ -36,6 +36,7 @@
 		DC8CB4B42859189A0016FC5F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8CB4B32859189A0016FC5F /* QuartzCore.framework */; };
 		DC8CB4B6285918FC0016FC5F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8CB4B5285918FC0016FC5F /* AppKit.framework */; };
 		DC8CB4B8285919030016FC5F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8CB4B7285919030016FC5F /* GameController.framework */; };
+		DCBF602C2869D4F000BAB560 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCBF602A2869D4F000BAB560 /* Renderer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,6 +181,8 @@
 		DC8CB4B32859189A0016FC5F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DC8CB4B5285918FC0016FC5F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		DC8CB4B7285919030016FC5F /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		DCBF602A2869D4F000BAB560 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
+		DCBF602B2869D4F000BAB560 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -371,6 +374,8 @@
 			children = (
 				D18F8687285BDDB700819416 /* RayTracing.entitlements */,
 				D18F868B285BDDDB00819416 /* WalnutApp.cpp */,
+				DCBF602A2869D4F000BAB560 /* Renderer.cpp */,
+				DCBF602B2869D4F000BAB560 /* Renderer.h */,
 			);
 			path = RayTracing;
 			sourceTree = "<group>";
@@ -593,6 +598,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCBF602C2869D4F000BAB560 /* Renderer.cpp in Sources */,
 				D18F868C285BDDDB00819416 /* WalnutApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

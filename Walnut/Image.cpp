@@ -83,6 +83,27 @@ namespace Walnut {
         });
     }
 
+    void Image::Resize(uint32_t width, uint32_t height) {
+        if (this->width == width && this->height == height) { return; }
+
+        this->width = width;
+        this->height = height;
+
+        auto previousTexture = texture;
+
+        auto pixelFormat = Utils::WalnutFormatToMetalFormat(format);
+        auto descriptor = MTL::TextureDescriptor::texture2DDescriptor(pixelFormat, width, height, false);
+
+        MTL::Device* device = Application::GetDevice();
+        texture = device->newTexture(descriptor);
+
+        if (previousTexture != nullptr) {
+            Application::SubmitResourceFree([inTexture = previousTexture]() {
+                inTexture->release();
+            });
+        }
+    }
+
     void Image::SetData(const void *data) {
         if (texture == nullptr) {
             auto pixelFormat = Utils::WalnutFormatToMetalFormat(format);

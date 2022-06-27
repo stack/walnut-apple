@@ -7,11 +7,11 @@
 
 #include <Walnut/Application.h>
 #include <Walnut/EntryPoint.h>
-#include <Walnut/Image.h>
-#include <Walnut/Random.h>
 #include <Walnut/Timer.h>
 
 #include <imgui.h>
+
+#include "Renderer.h"
 
 using namespace Walnut;
 
@@ -34,9 +34,16 @@ public:
         
         viewportWidth = ImGui::GetContentRegionAvail().x;
         viewportHeight = ImGui::GetContentRegionAvail().y;
-        
+
+        auto image = renderer.GetFinalImage();
+
         if (image != nullptr) {
-            ImGui::Image(image->GetDescriptorSet(), { (float)image->GetWidth(), (float)image->GetHeight() } );
+            ImGui::Image(
+                image->GetDescriptorSet(),
+                { (float)image->GetWidth(), (float)image->GetHeight() },
+                ImVec2(0, 1),
+                ImVec2(1, 0)
+            );
         }
         
         ImGui::End();
@@ -47,26 +54,15 @@ public:
     
     void Render() {
         Timer timer;
-        
-        if (image == nullptr || viewportWidth != image->GetWidth() || viewportHeight != image->GetHeight()) {
-            image = std::make_shared<Image>(viewportWidth, viewportHeight, ImageFormat::RGBA);
-            delete[] imageData;
-            imageData = new uint32_t[viewportWidth * viewportHeight];
-        }
-        
-        for (uint32_t i = 0; i < viewportWidth * viewportHeight; i++) {
-            imageData[i] = Random::UInt();
-            imageData[i] |= 0xff000000;
-        }
-        
-        image->SetData(imageData);
+
+        renderer.OnResize(viewportWidth, viewportHeight);
+        renderer.Render();
         
         lastRenderTime = timer.ElapsedMillis();
     }
     
 private:
-    std::shared_ptr<Image> image;
-    uint32_t* imageData = nullptr;
+    Renderer renderer;
     uint32_t viewportWidth = 0, viewportHeight = 0;
     
     float lastRenderTime = 0.0f;
