@@ -20,15 +20,6 @@ class ExampleLayer : public Walnut::Layer
 public:
 
     virtual void OnUIRender() override {
-        ImGui::Begin("Settings");
-        ImGui::Text("Last render: %.3fms", lastRenderTime);
-        
-        if (ImGui::Button("Render")) {
-            Render();
-        }
-        
-        ImGui::End();
-        
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("Viewport");
         
@@ -48,6 +39,16 @@ public:
         
         ImGui::End();
         ImGui::PopStyleVar();
+        
+        ImGui::Begin("Settings");
+        ImGui::Text("Last render: %.3fms", lastRenderTime);
+        ImGui::Text("Viewport: %ux%u", viewportWidth, viewportHeight);
+        
+        if (ImGui::Button("Render")) {
+            Render();
+        }
+        
+        ImGui::End();
         
         Render();
     }

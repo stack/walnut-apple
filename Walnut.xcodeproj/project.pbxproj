@@ -156,6 +156,7 @@
 		D18F8696285BDE7600819416 /* Random.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
 		D18F8697285BDE7600819416 /* Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		D18F869A285BE00C00819416 /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
+		DC499387287DC07E00115505 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DC8B6998285B6F1300DB13EF /* MetalCpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalCpp.cpp; sourceTree = "<group>"; };
 		DC8CB46D2858D8310016FC5F /* libWalnut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libWalnut.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC8CB4772858D8AA0016FC5F /* WalnutApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalnutApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -372,6 +373,7 @@
 		D18F8679285BDDB700819416 /* RayTracing */ = {
 			isa = PBXGroup;
 			children = (
+				DC499387287DC07E00115505 /* Info.plist */,
 				D18F8687285BDDB700819416 /* RayTracing.entitlements */,
 				D18F868B285BDDDB00819416 /* WalnutApp.cpp */,
 				DCBF602A2869D4F000BAB560 /* Renderer.cpp */,
@@ -711,6 +713,7 @@
 					"$(SRCROOT)/Third-Party/metal-cpp",
 					"$(SRCROOT)/Third-Party/metal-cpp-extensions",
 				);
+				INFOPLIST_FILE = RayTracing/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -790,6 +793,7 @@
 					"$(SRCROOT)/Third-Party/metal-cpp",
 					"$(SRCROOT)/Third-Party/metal-cpp-extensions",
 				);
+				INFOPLIST_FILE = RayTracing/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
