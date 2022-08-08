@@ -23,6 +23,11 @@ public:
     void Render();
 
     std::shared_ptr<Walnut::Image> GetFinalImage() const { return finalImage; }
+    
+public:
+    
+    float sphereColor[3] = { 1.0f, 0.0f, 1.0f };
+    float lightDirection[3] = { -1.0f, -1.0f, -1.0f } ;
 
 private:
 

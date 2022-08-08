@@ -44,9 +44,12 @@ public:
         ImGui::Text("Last render: %.3fms", lastRenderTime);
         ImGui::Text("Viewport: %ux%u", viewportWidth, viewportHeight);
         
-        if (ImGui::Button("Render")) {
-            Render();
-        }
+        ImGui::Separator();
+        
+        ImGuiColorEditFlags pickerFlags = ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_Float;
+        ImGui::ColorPicker3("Sphere Color", (float *)&(renderer.sphereColor), pickerFlags);
+        
+        ImGui::SliderFloat3("Light Direction", (float *)&(renderer.lightDirection), -1.0f, 1.0f, "%0.01f");
         
         ImGui::End();
         

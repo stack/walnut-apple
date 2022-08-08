@@ -103,40 +103,14 @@ glm::vec4 Renderer::PerPixel(glm::vec2 coord) {
     glm::vec3 hitPoint = rayOrigin + rayDirection * closestT;
     glm::vec3 normal = glm::normalize(hitPoint - sphereOrigin);
     
-    glm::vec3 lightDirection(-1.0f, -1.0f, -1.0f);
+    glm::vec3 lightDirection(this->lightDirection[0], this->lightDirection[1], this->lightDirection[2]);
     lightDirection = glm::normalize(lightDirection);
     
     float dot = glm::dot(normal, -lightDirection); // == cos(angle) because both parameters are unit vectors
     float intensity = glm::max(dot, 0.0f);
     
-    glm::vec3 sphereColor(1.0f, 0.0f, 1.0f); // RGB
+    glm::vec3 sphereColor(this->sphereColor[0], this->sphereColor[1], this->sphereColor[2]);
     sphereColor *= intensity;
     
     return glm::vec4(sphereColor, 1.0f); // RGBA
-
-    
-    
-    /* OLD TEST CODE */
-    /*
-    std::vector<float> values = {
-        (-b - sqrt(discriminant)) / (2.0f * a),
-        (-b + sqrt(discriminant)) / (2.0f * a),
-    };
-    
-    glm::vec3 hitPosition = rayOrigin + rayDirection * values[1];
-    glm::vec3 normal = glm::normalize(hitPosition - sphereOrigin);
-    
-    float lightIntensity = glm::max(glm::dot(normal, -lightDirection), 0.0f);
-    
-    glm::vec3 sphereColor(1.0f, 0.0f, 1.0f);
-    sphereColor *= lightIntensity;
-    sphereColor *= 255.0f;
-    
-    uint32_t color = 0xff000000;
-    color += ((uint32_t)sphereColor.x) << 16;
-    color += ((uint32_t)sphereColor.y) << 8;
-    color += ((uint32_t)sphereColor.z) << 0;
-    
-    return color;
-     */
 }
