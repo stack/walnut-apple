@@ -141,7 +141,7 @@ namespace Walnut {
         commandQueue = MetalDevice->newCommandQueue();
 
         metalView = MTK::View::alloc()->init(frame, MetalDevice);
-        metalView->setColorPixelFormat((MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB));
+        metalView->setColorPixelFormat((MTL::PixelFormat::PixelFormatBGRA8Unorm));
         metalView->setClearColor(MTL::ClearColor::Make(1.0, 0.0, 0.0, 1.0));
 
         metalView->setDelegate(this);

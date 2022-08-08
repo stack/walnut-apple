@@ -9,6 +9,20 @@
 
 #include <Walnut/Random.h>
 
+namespace Utils {
+
+    static uint32_t ConvertToRGBA(const glm::vec4& color) {
+        uint8_t r = (uint8_t)(color.r * 255.0f);
+        uint8_t g = (uint8_t)(color.g * 255.0f);
+        uint8_t b = (uint8_t)(color.b * 255.0f);
+        uint8_t a = (uint8_t)(color.a * 255.0f);
+        
+        uint32_t result = (a << 24) | (b << 16) | (g << 8) | r;
+        
+        return result;
+    }
+}
+
 void Renderer::OnResize(uint32_t width, uint32_t height) {
     if (finalImage == nullptr) {
         finalImage = std::make_shared<Walnut::Image>(width, height, Walnut::ImageFormat::RGBA);
@@ -35,23 +49,23 @@ void Renderer::Render() {
             
             coord.x *= aspectRatio;
 
-            imageData[(y * finalImage->GetWidth()) + x] = PerPixel(coord);
+            glm::vec4 color = PerPixel(coord);
+            color = glm::clamp(color, glm::vec4(0.0f), glm::vec4(1.0f));
+            
+            imageData[(y * finalImage->GetWidth()) + x] = Utils::ConvertToRGBA(color);
         }
     }
 
     finalImage->SetData(imageData);
 }
 
-uint32_t Renderer::PerPixel(glm::vec2 coord) {
-    glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+glm::vec4 Renderer::PerPixel(glm::vec2 coord) {
+    glm::vec3 rayOrigin(0.0f, 0.0f, 1.0f);
     glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
     // rayDirection = glm::normalize(rayDirection);
     
-    glm::vec3 sphereOrigin(0.0f);
+    glm::vec3 sphereOrigin(0.0f, 0.0f, 0.0f);
     float radius = 0.5;
-    
-    glm::vec3 lightDirection(-1.0f, -1.0f, 1.0f);
-    lightDirection = glm::normalize(lightDirection);
 
     // (bx^2 + by^2 + bz^2)t^2 + (2(axbx + ayby + azbz))t + (ax^2 + ay^2 + az^2 - r^2) = 0]
     // where
@@ -75,31 +89,54 @@ uint32_t Renderer::PerPixel(glm::vec2 coord) {
     // b^2 - 4ac
     float discriminant = b * b - 4.0f * a * c;
 
-    if (discriminant >= 0.0f) {
-        // Full quadratic equation
-        // (-b +- sqrt(discriminant)) / (2.0f * a)
-        
-        std::vector<float> values = {
-            (-b - sqrt(discriminant)) / (2.0f * a),
-            (-b + sqrt(discriminant)) / (2.0f * a),
-        };
-        
-        glm::vec3 hitPosition = rayOrigin + rayDirection * values[1];
-        glm::vec3 normal = glm::normalize(hitPosition - sphereOrigin);
-        
-        float lightIntensity = glm::max(glm::dot(normal, -lightDirection), 0.0f);
-        
-        glm::vec3 sphereColor(1.0f, 0.0f, 1.0f);
-        sphereColor *= lightIntensity;
-        sphereColor *= 255.0f;
-        
-        uint32_t color = 0xff000000;
-        color += ((uint32_t)sphereColor.x) << 16;
-        color += ((uint32_t)sphereColor.y) << 8;
-        color += ((uint32_t)sphereColor.z) << 0;
-        
-        return color;
-    } else {
-        return 0xff000000;
+    // No hit, so exit early
+    if (discriminant < 0.0f) {
+        return glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); // RGBA
     }
+    
+    // Full quadratic equation
+    // (-b +- sqrt(discriminant)) / (2.0f * a)
+    // float t0 = (-b + glm::sqrt(discriminant)) / (2.0f * a);
+    // float t1 = (-b - glm::sqrt(discriminant)) / (2.0f * a);
+    float closestT = (-b - glm::sqrt(discriminant)) / (2.0f * a);
+    
+    glm::vec3 hitPoint = rayOrigin + rayDirection * closestT;
+    glm::vec3 normal = glm::normalize(hitPoint - sphereOrigin);
+    
+    glm::vec3 lightDirection(-1.0f, -1.0f, -1.0f);
+    lightDirection = glm::normalize(lightDirection);
+    
+    float dot = glm::dot(normal, -lightDirection); // == cos(angle) because both parameters are unit vectors
+    float intensity = glm::max(dot, 0.0f);
+    
+    glm::vec3 sphereColor(1.0f, 0.0f, 1.0f); // RGB
+    sphereColor *= intensity;
+    
+    return glm::vec4(sphereColor, 1.0f); // RGBA
+
+    
+    
+    /* OLD TEST CODE */
+    /*
+    std::vector<float> values = {
+        (-b - sqrt(discriminant)) / (2.0f * a),
+        (-b + sqrt(discriminant)) / (2.0f * a),
+    };
+    
+    glm::vec3 hitPosition = rayOrigin + rayDirection * values[1];
+    glm::vec3 normal = glm::normalize(hitPosition - sphereOrigin);
+    
+    float lightIntensity = glm::max(glm::dot(normal, -lightDirection), 0.0f);
+    
+    glm::vec3 sphereColor(1.0f, 0.0f, 1.0f);
+    sphereColor *= lightIntensity;
+    sphereColor *= 255.0f;
+    
+    uint32_t color = 0xff000000;
+    color += ((uint32_t)sphereColor.x) << 16;
+    color += ((uint32_t)sphereColor.y) << 8;
+    color += ((uint32_t)sphereColor.z) << 0;
+    
+    return color;
+     */
 }
