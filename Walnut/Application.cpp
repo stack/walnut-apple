@@ -167,6 +167,11 @@ namespace Walnut {
 
         ImGui_ImplMetal_Init(MetalDevice);
         ImGui_ImplOSX_Init(metalView);
+        
+        auto bundle = NS::Bundle::mainBundle();
+        auto resourcePath = bundle->resourcePath();
+        auto fontPath = resourcePath->stringByAppendingString(NS::String::string("/SF-Mono-Regular.otf", NS::StringEncoding::UTF8StringEncoding));
+        io.Fonts->AddFontFromFileTTF(fontPath->utf8String(), 13.0f);
 
         window->makeKeyAndOrderFront(nullptr);
 

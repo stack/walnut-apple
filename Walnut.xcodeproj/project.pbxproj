@@ -37,6 +37,30 @@
 		DC8CB4B6285918FC0016FC5F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8CB4B5285918FC0016FC5F /* AppKit.framework */; };
 		DC8CB4B8285919030016FC5F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8CB4B7285919030016FC5F /* GameController.framework */; };
 		DCBF602C2869D4F000BAB560 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCBF602A2869D4F000BAB560 /* Renderer.cpp */; };
+		DCEAEAB728A183BB00DC076A /* SF-Mono-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAB28A183BB00DC076A /* SF-Mono-Heavy.otf */; };
+		DCEAEAB828A183BB00DC076A /* SF-Mono-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAB28A183BB00DC076A /* SF-Mono-Heavy.otf */; };
+		DCEAEAB928A183BB00DC076A /* SF-Mono-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAC28A183BB00DC076A /* SF-Mono-LightItalic.otf */; };
+		DCEAEABA28A183BB00DC076A /* SF-Mono-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAC28A183BB00DC076A /* SF-Mono-LightItalic.otf */; };
+		DCEAEABB28A183BB00DC076A /* SF-Mono-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAD28A183BB00DC076A /* SF-Mono-Bold.otf */; };
+		DCEAEABC28A183BB00DC076A /* SF-Mono-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAD28A183BB00DC076A /* SF-Mono-Bold.otf */; };
+		DCEAEABD28A183BB00DC076A /* SF-Mono-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAE28A183BB00DC076A /* SF-Mono-Light.otf */; };
+		DCEAEABE28A183BB00DC076A /* SF-Mono-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAE28A183BB00DC076A /* SF-Mono-Light.otf */; };
+		DCEAEABF28A183BB00DC076A /* SF-Mono-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAF28A183BB00DC076A /* SF-Mono-MediumItalic.otf */; };
+		DCEAEAC028A183BB00DC076A /* SF-Mono-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAAF28A183BB00DC076A /* SF-Mono-MediumItalic.otf */; };
+		DCEAEAC128A183BB00DC076A /* SF-Mono-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB028A183BB00DC076A /* SF-Mono-BoldItalic.otf */; };
+		DCEAEAC228A183BB00DC076A /* SF-Mono-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB028A183BB00DC076A /* SF-Mono-BoldItalic.otf */; };
+		DCEAEAC328A183BB00DC076A /* SF-Mono-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB128A183BB00DC076A /* SF-Mono-RegularItalic.otf */; };
+		DCEAEAC428A183BB00DC076A /* SF-Mono-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB128A183BB00DC076A /* SF-Mono-RegularItalic.otf */; };
+		DCEAEAC528A183BB00DC076A /* SF-Mono-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB228A183BB00DC076A /* SF-Mono-Semibold.otf */; };
+		DCEAEAC628A183BB00DC076A /* SF-Mono-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB228A183BB00DC076A /* SF-Mono-Semibold.otf */; };
+		DCEAEAC728A183BB00DC076A /* SF-Mono-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB328A183BB00DC076A /* SF-Mono-Medium.otf */; };
+		DCEAEAC828A183BB00DC076A /* SF-Mono-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB328A183BB00DC076A /* SF-Mono-Medium.otf */; };
+		DCEAEAC928A183BB00DC076A /* SF-Mono-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB428A183BB00DC076A /* SF-Mono-Regular.otf */; };
+		DCEAEACA28A183BB00DC076A /* SF-Mono-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB428A183BB00DC076A /* SF-Mono-Regular.otf */; };
+		DCEAEACB28A183BB00DC076A /* SF-Mono-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB528A183BB00DC076A /* SF-Mono-SemiboldItalic.otf */; };
+		DCEAEACC28A183BB00DC076A /* SF-Mono-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB528A183BB00DC076A /* SF-Mono-SemiboldItalic.otf */; };
+		DCEAEACD28A183BB00DC076A /* SF-Mono-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB628A183BB00DC076A /* SF-Mono-HeavyItalic.otf */; };
+		DCEAEACE28A183BB00DC076A /* SF-Mono-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCEAEAB628A183BB00DC076A /* SF-Mono-HeavyItalic.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +208,18 @@
 		DC8CB4B7285919030016FC5F /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 		DCBF602A2869D4F000BAB560 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		DCBF602B2869D4F000BAB560 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		DCEAEAAB28A183BB00DC076A /* SF-Mono-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-Heavy.otf"; sourceTree = "<group>"; };
+		DCEAEAAC28A183BB00DC076A /* SF-Mono-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-LightItalic.otf"; sourceTree = "<group>"; };
+		DCEAEAAD28A183BB00DC076A /* SF-Mono-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-Bold.otf"; sourceTree = "<group>"; };
+		DCEAEAAE28A183BB00DC076A /* SF-Mono-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-Light.otf"; sourceTree = "<group>"; };
+		DCEAEAAF28A183BB00DC076A /* SF-Mono-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-MediumItalic.otf"; sourceTree = "<group>"; };
+		DCEAEAB028A183BB00DC076A /* SF-Mono-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-BoldItalic.otf"; sourceTree = "<group>"; };
+		DCEAEAB128A183BB00DC076A /* SF-Mono-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-RegularItalic.otf"; sourceTree = "<group>"; };
+		DCEAEAB228A183BB00DC076A /* SF-Mono-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-Semibold.otf"; sourceTree = "<group>"; };
+		DCEAEAB328A183BB00DC076A /* SF-Mono-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-Medium.otf"; sourceTree = "<group>"; };
+		DCEAEAB428A183BB00DC076A /* SF-Mono-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-Regular.otf"; sourceTree = "<group>"; };
+		DCEAEAB528A183BB00DC076A /* SF-Mono-SemiboldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-SemiboldItalic.otf"; sourceTree = "<group>"; };
+		DCEAEAB628A183BB00DC076A /* SF-Mono-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Mono-HeavyItalic.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -407,6 +443,7 @@
 		DC8CB4722858D84B0016FC5F /* Walnut */ = {
 			isa = PBXGroup;
 			children = (
+				DCEAEAAA28A183A600DC076A /* Fonts */,
 				DC8CB4932858FC130016FC5F /* Application.cpp */,
 				DC8CB4922858FA8C0016FC5F /* Application.h */,
 				DC8CB4902858F9610016FC5F /* EntryPoint.h */,
@@ -468,6 +505,25 @@
 				DC8CB4A3285917FE0016FC5F /* imgui.h */,
 			);
 			name = imgui;
+			sourceTree = "<group>";
+		};
+		DCEAEAAA28A183A600DC076A /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAEAAD28A183BB00DC076A /* SF-Mono-Bold.otf */,
+				DCEAEAB028A183BB00DC076A /* SF-Mono-BoldItalic.otf */,
+				DCEAEAAB28A183BB00DC076A /* SF-Mono-Heavy.otf */,
+				DCEAEAB628A183BB00DC076A /* SF-Mono-HeavyItalic.otf */,
+				DCEAEAAE28A183BB00DC076A /* SF-Mono-Light.otf */,
+				DCEAEAAC28A183BB00DC076A /* SF-Mono-LightItalic.otf */,
+				DCEAEAB328A183BB00DC076A /* SF-Mono-Medium.otf */,
+				DCEAEAAF28A183BB00DC076A /* SF-Mono-MediumItalic.otf */,
+				DCEAEAB428A183BB00DC076A /* SF-Mono-Regular.otf */,
+				DCEAEAB128A183BB00DC076A /* SF-Mono-RegularItalic.otf */,
+				DCEAEAB228A183BB00DC076A /* SF-Mono-Semibold.otf */,
+				DCEAEAB528A183BB00DC076A /* SF-Mono-SemiboldItalic.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -583,6 +639,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCEAEAC828A183BB00DC076A /* SF-Mono-Medium.otf in Resources */,
+				DCEAEAC228A183BB00DC076A /* SF-Mono-BoldItalic.otf in Resources */,
+				DCEAEACA28A183BB00DC076A /* SF-Mono-Regular.otf in Resources */,
+				DCEAEABE28A183BB00DC076A /* SF-Mono-Light.otf in Resources */,
+				DCEAEABA28A183BB00DC076A /* SF-Mono-LightItalic.otf in Resources */,
+				DCEAEACE28A183BB00DC076A /* SF-Mono-HeavyItalic.otf in Resources */,
+				DCEAEAC028A183BB00DC076A /* SF-Mono-MediumItalic.otf in Resources */,
+				DCEAEABC28A183BB00DC076A /* SF-Mono-Bold.otf in Resources */,
+				DCEAEAB828A183BB00DC076A /* SF-Mono-Heavy.otf in Resources */,
+				DCEAEAC628A183BB00DC076A /* SF-Mono-Semibold.otf in Resources */,
+				DCEAEAC428A183BB00DC076A /* SF-Mono-RegularItalic.otf in Resources */,
+				DCEAEACC28A183BB00DC076A /* SF-Mono-SemiboldItalic.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +658,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCEAEAC728A183BB00DC076A /* SF-Mono-Medium.otf in Resources */,
+				DCEAEAC128A183BB00DC076A /* SF-Mono-BoldItalic.otf in Resources */,
+				DCEAEAC928A183BB00DC076A /* SF-Mono-Regular.otf in Resources */,
+				DCEAEABD28A183BB00DC076A /* SF-Mono-Light.otf in Resources */,
+				DCEAEAB928A183BB00DC076A /* SF-Mono-LightItalic.otf in Resources */,
+				DCEAEACD28A183BB00DC076A /* SF-Mono-HeavyItalic.otf in Resources */,
+				DCEAEABF28A183BB00DC076A /* SF-Mono-MediumItalic.otf in Resources */,
+				DCEAEABB28A183BB00DC076A /* SF-Mono-Bold.otf in Resources */,
+				DCEAEAB728A183BB00DC076A /* SF-Mono-Heavy.otf in Resources */,
+				DCEAEAC528A183BB00DC076A /* SF-Mono-Semibold.otf in Resources */,
+				DCEAEAC328A183BB00DC076A /* SF-Mono-RegularItalic.otf in Resources */,
+				DCEAEACB28A183BB00DC076A /* SF-Mono-SemiboldItalic.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
