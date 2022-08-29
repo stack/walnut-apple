@@ -37,19 +37,15 @@ void Renderer::OnResize(uint32_t width, uint32_t height) {
     }
 }
 
-void Renderer::Render() {
-    auto width = finalImage->GetWidth();
-    auto height = finalImage->GetHeight();
-    float aspectRatio = (float)width / (float)height;
+void Renderer::Render(const Camera& camera) {
+    Ray ray;
+    ray.origin = camera.GetPosition();
     
     for (uint32_t y = 0; y < finalImage->GetHeight(); y++) {
         for (uint32_t x = 0; x < finalImage->GetWidth(); x++) {
-            glm::vec2 coord = { (float)x / (float)finalImage->GetWidth(), (float)y / (float)finalImage->GetHeight() };
-            coord = coord * 2.0f - 1.0f; // Normalize from 0 -> 1 to -1 -> 1
-            
-            coord.x *= aspectRatio;
+            ray.direction = camera.GetRayDirections()[x + y * finalImage->GetWidth()];
 
-            glm::vec4 color = PerPixel(coord);
+            glm::vec4 color = TraceRay(ray);
             color = glm::clamp(color, glm::vec4(0.0f), glm::vec4(1.0f));
             
             imageData[(y * finalImage->GetWidth()) + x] = Utils::ConvertToRGBA(color);
@@ -59,11 +55,7 @@ void Renderer::Render() {
     finalImage->SetData(imageData);
 }
 
-glm::vec4 Renderer::PerPixel(glm::vec2 coord) {
-    glm::vec3 rayOrigin(0.0f, 0.0f, 1.0f);
-    glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
-    // rayDirection = glm::normalize(rayDirection);
-    
+glm::vec4 Renderer::TraceRay(const Ray& ray) {
     glm::vec3 sphereOrigin(0.0f, 0.0f, 0.0f);
     float radius = 0.5;
 
@@ -77,13 +69,13 @@ glm::vec4 Renderer::PerPixel(glm::vec2 coord) {
     // NOTE: a, b, & c are the quadratic variables, not the ones mentioned above. These are the coefficients above
 
     // float a = rayDirection.x * rayDirection.x + rayDirection.y * rayDirection.y + rayDirection.z * rayDirection.z;
-    float a = glm::dot(rayDirection, rayDirection);
+    float a = glm::dot(ray.direction, ray.direction);
 
     // float b = 2.0f * (rayOrigin.x * rayDirection.x + rayOrigin.y * rayDirection.y + rayOrigin.z * rayDirection.z);
-    float b = 2.0f * glm::dot(rayOrigin, rayDirection);
+    float b = 2.0f * glm::dot(ray.origin, ray.direction);
 
     // float c = rayOrigin.x * rayOrigin.x + rayOrigin.y * rayOrigin.y * rayOrigin.z * rayOrigin.z - radius * radius;
-    float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
+    float c = glm::dot(ray.origin, ray.origin) - radius * radius;
 
     // Quadratic formula discriminant
     // b^2 - 4ac
@@ -100,7 +92,7 @@ glm::vec4 Renderer::PerPixel(glm::vec2 coord) {
     // float t1 = (-b - glm::sqrt(discriminant)) / (2.0f * a);
     float closestT = (-b - glm::sqrt(discriminant)) / (2.0f * a);
     
-    glm::vec3 hitPoint = rayOrigin + rayDirection * closestT;
+    glm::vec3 hitPoint = ray.origin + ray.direction * closestT;
     glm::vec3 normal = glm::normalize(hitPoint - sphereOrigin);
     
     glm::vec3 lightDirection(this->lightDirection[0], this->lightDirection[1], this->lightDirection[2]);

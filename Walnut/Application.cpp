@@ -21,6 +21,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Utilities.h"
+
 #include <iostream>
 
 extern bool IsApplicationRunning;
@@ -69,6 +71,8 @@ namespace Walnut {
         }
         
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHintString(GLFW_COCOA_FRAME_NAME, "WalnutApp");
+        glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
         windowHandle = glfwCreateWindow(specification.Width, specification.Height, specification.Name.c_str(), NULL, NULL);
         
         // Setup Metal
@@ -88,14 +92,14 @@ namespace Walnut {
         ResourceFreeQueue.resize(MaxFramesInFlight);
         
         NS::Window* window = reinterpret_cast<NS::Window*>(glfwGetCocoaWindow(windowHandle));
-        window->setContentView(metalView);
+        AddViewToWindow(metalView, window);
         
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
         ImGuiIO& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 

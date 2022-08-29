@@ -317,7 +317,7 @@ var searchData=
   ['glfwextensionsupported_314',['glfwExtensionSupported',['../group__context.html#ga87425065c011cef1ebd6aac75e059dfa',1,'glfw3.h']]],
   ['glfwfocuswindow_315',['glfwFocusWindow',['../group__window.html#ga873780357abd3f3a081d71a40aae45a1',1,'glfw3.h']]],
   ['glfwframebuffersizefun_316',['GLFWframebuffersizefun',['../group__window.html#gae18026e294dde685ed2e5f759533144d',1,'glfw3.h']]],
-  ['glfwgamepadstate_317',['GLFWgamepadstate',['../structGLFWgamepadstate.html',1,'GLFWgamepadstate'],['../group__input.html#ga61acfb1f28f751438dd221225c5e725d',1,'GLFWgamepadstate():&#160;glfw3.h']]],
+  ['glfwgamepadstate_317',['GLFWgamepadstate',['../group__input.html#ga61acfb1f28f751438dd221225c5e725d',1,'GLFWgamepadstate():&#160;glfw3.h'],['../structGLFWgamepadstate.html',1,'GLFWgamepadstate']]],
   ['glfwgammaramp_318',['GLFWgammaramp',['../structGLFWgammaramp.html',1,'GLFWgammaramp'],['../group__monitor.html#ga939cf093cb0af0498b7b54dc2e181404',1,'GLFWgammaramp():&#160;glfw3.h']]],
   ['glfwgetclipboardstring_319',['glfwGetClipboardString',['../group__input.html#ga71a5b20808ea92193d65c21b82580355',1,'glfw3.h']]],
   ['glfwgetcocoamonitor_320',['glfwGetCocoaMonitor',['../group__native.html#gaf22f429aec4b1aab316142d66d9be3e6',1,'glfw3native.h']]],

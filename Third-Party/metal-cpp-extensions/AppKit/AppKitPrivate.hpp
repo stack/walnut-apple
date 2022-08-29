@@ -128,6 +128,9 @@ _APPKIT_PRIVATE_DEF_SEL( initWithContentRect_styleMask_backing_defer_,
 
 _APPKIT_PRIVATE_DEF_SEL( initWithFrame_,
 						"initWithFrame:" );
+    
+_APPKIT_PRIVATE_DEF_SEL( addSubview_,
+                         "addSubview:" );
 
 _APPKIT_PRIVATE_DEF_SEL( initWithTitle_,
 						"initWithTitle:" );

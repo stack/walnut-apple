@@ -11,6 +11,9 @@
 
 #include <glm/glm.hpp>
 
+#include "Camera.h"
+#include "Ray.h"
+
 #include <memory>
 
 class Renderer {
@@ -20,7 +23,7 @@ public:
     Renderer() = default;
 
     void OnResize(uint32_t width, uint32_t height);
-    void Render();
+    void Render(const Camera& camera);
 
     std::shared_ptr<Walnut::Image> GetFinalImage() const { return finalImage; }
     
@@ -31,7 +34,7 @@ public:
 
 private:
 
-    glm::vec4 PerPixel(glm::vec2 coord);
+    glm::vec4 TraceRay(const Ray& ray);
 
 private:
 

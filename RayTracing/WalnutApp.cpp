@@ -11,6 +11,7 @@
 
 #include <imgui.h>
 
+#include "Camera.h"
 #include "Renderer.h"
 
 using namespace Walnut;
@@ -19,6 +20,16 @@ class ExampleLayer : public Walnut::Layer
 {
 public:
 
+    ExampleLayer() :
+        camera(45.0f, 0.1f, 100.0f)
+    {
+        
+    }
+    
+    virtual void OnUpdate(float ts) override {
+        camera.OnUpdate(ts);
+    }
+    
     virtual void OnUIRender() override {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("Viewport");
@@ -59,13 +70,16 @@ public:
     void Render() {
         Timer timer;
 
+        camera.OnResize(viewportWidth, viewportHeight);
         renderer.OnResize(viewportWidth, viewportHeight);
-        renderer.Render();
+        
+        renderer.Render(camera);
         
         lastRenderTime = timer.ElapsedMillis();
     }
     
 private:
+    Camera camera;
     Renderer renderer;
     uint32_t viewportWidth = 0, viewportHeight = 0;
     
