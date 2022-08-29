@@ -11,6 +11,18 @@
 #include <backends/imgui_impl_metal.h>
 #include <backends/imgui_impl_osx.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+#define GLFW_INCLUDE_NONE
+#define GLFW_EXPOSE_NATIVE_COCOA
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+#pragma clang diagnostic pop
+
+#include <glm/glm.hpp>
+
+#include <iostream>
+
 extern bool IsApplicationRunning;
 
 static std::vector<std::vector<std::function<void()>>> ResourceFreeQueue;
@@ -19,12 +31,20 @@ static const int MaxFramesInFlight = 3;
 static uint32_t CurrentFrameIndex = 0;
 static MTL::Device* MetalDevice = nullptr;
 
+static Walnut::Application* ApplicationInstance = nullptr;
+
+static void GlfwErrorCallback(int error, const char* description) {
+    fprintf(stderr, "GLFW Error %i: %s\n", error, description);
+}
+
 namespace Walnut {
 
     Application::Application(const ApplicationSpecification& applicationSpecification) :
         specification(applicationSpecification),
         viewSize({ 0.0, 0.0 })
     {
+        ApplicationInstance = this;
+        
         Init();
     }
 
@@ -33,122 +53,44 @@ namespace Walnut {
 
         commandQueue->release();
         metalView->release();
-        window->release();
     }
 
-    MTL::Device* Application::GetDevice() {
-        return MetalDevice;
+    Application& Application::Get() {
+        return *ApplicationInstance;
     }
 
     void Application::Init() {
-        autoreleasePool = NS::AutoreleasePool::alloc()->init();
-        commandSemaphore = dispatch_semaphore_create(MaxFramesInFlight);
+        // Setup GLFW window
+        glfwSetErrorCallback(GlfwErrorCallback);
         
-        ResourceFreeQueue.resize(MaxFramesInFlight);
-    }
-
-    void Application::Shutdown() {
-        for (auto& layer : layerStack) {
-            layer->OnDetach();
+        if (!glfwInit()) {
+            std::cerr << "Could not initialize GLFW!" << std::endl;
+            return;
         }
-
-        layerStack.clear();
-
-        autoreleasePool->release();
-
-        IsApplicationRunning = false;
-    }
-
-    void Application::Run() {
-        NS::Application* sharedApplication = NS::Application::sharedApplication();
-        sharedApplication->setDelegate(this);
-        sharedApplication->run();
-    }
-
-    void Application::Close() {
-        // TODO: `stop` is not implemented
-        // NS::Application* sharedApplication = NS::Application::sharedApplication();
-        // sharedApplication->stop();
-    }
-
-    void Application::SubmitResourceFree(std::function<void()>&& func) {
-        ResourceFreeQueue[CurrentFrameIndex].emplace_back(func);
-    }
-
-    NS::Menu* Application::CreateMenuBar() {
-        using NS::StringEncoding::UTF8StringEncoding;
-
-        NS::Menu* mainMenu = NS::Menu::alloc()->init();
-        NS::MenuItem *appMenuItem = NS::MenuItem::alloc()->init();
-        NS::Menu *appMenu = NS::Menu::alloc()->init(NS::String::string("Appname", UTF8StringEncoding));
-
-        NS::String* appName = NS::String::string(specification.Name.c_str(), UTF8StringEncoding);
-        NS::String* quitItemName = NS::String::string("Quit ", UTF8StringEncoding)->stringByAppendingString(appName);
-        SEL quitCallback = NS::MenuItem::registerActionCallback("appQuit", [](void*,SEL,const NS::Object* sender) {
-            // TODO: How to I break the run loop here properly
-            auto app = NS::Application::sharedApplication();
-            app->terminate(sender);
-        });
-
-        NS::MenuItem* appQuitItem = appMenu->addItem(quitItemName, quitCallback, NS::String::string("q", UTF8StringEncoding));
-        appQuitItem->setKeyEquivalentModifierMask(NS::EventModifierFlagCommand);
-        appMenuItem->setSubmenu(appMenu);
-
-        NS::MenuItem* windowMenuItem = NS::MenuItem::alloc()->init();
-        NS::Menu* windowMenu = NS::Menu::alloc()->init(NS::String::string("Window", UTF8StringEncoding));
-
-        SEL closeWindowCallback = NS::MenuItem::registerActionCallback("windowClose", [](void*,SEL,const NS::Object* sender) {
-            // TODO: Is this even needed?
-            auto app = NS::Application::sharedApplication();
-            app->windows()->object<NS::Window>(0)->close();
-        });
-
-        NS::MenuItem *closeWindowItem = windowMenu->addItem(NS::String::string("Close Window", UTF8StringEncoding), closeWindowCallback, NS::String::string("w", UTF8StringEncoding));
-        closeWindowItem->setKeyEquivalentModifierMask(NS::EventModifierFlagCommand);
-
-        windowMenuItem->setSubmenu(windowMenu);
-
-        mainMenu->addItem(appMenuItem);
-        mainMenu->addItem(windowMenuItem);
-
-        appMenuItem->release();
-        windowMenuItem->release();
-        appMenu->release();
-        windowMenu->release();
-
-        return mainMenu->autorelease();
-    }
-
-    void Application::applicationWillFinishLaunching(NS::Notification* notification) {
-        NS::Menu *menu = CreateMenuBar();
-
-        NS::Application* app = reinterpret_cast<NS::Application*>(notification->object());
-        app->setMainMenu(menu);
-        app->setActivationPolicy(NS::ActivationPolicy::ActivationPolicyRegular);
-    }
-
-    void Application::applicationDidFinishLaunching(NS::Notification* notification) {
-        CGRect frame = (CGRect){ { 100.0, 100.0 }, { static_cast<CGFloat>(specification.Width), static_cast<CGFloat>(specification.Height) } };
-
-        window = NS::Window::alloc()->init(
-            frame,
-            NS::WindowStyleMaskClosable | NS::WindowStyleMaskTitled | NS::WindowStyleMaskResizable,
-            NS::BackingStoreBuffered,
-            false
-        );
-
+        
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        windowHandle = glfwCreateWindow(specification.Width, specification.Height, specification.Name.c_str(), NULL, NULL);
+        
+        // Setup Metal
+        CGRect frame = (CGRect){ { 0.0, 0.0 }, { static_cast<CGFloat>(specification.Width), static_cast<CGFloat>(specification.Height) } };
+        
         MetalDevice = MTL::CreateSystemDefaultDevice();
         commandQueue = MetalDevice->newCommandQueue();
 
         metalView = MTK::View::alloc()->init(frame, MetalDevice);
         metalView->setColorPixelFormat((MTL::PixelFormat::PixelFormatBGRA8Unorm));
         metalView->setClearColor(MTL::ClearColor::Make(1.0, 0.0, 0.0, 1.0));
+        metalView->setPaused(true);
+        metalView->setEnableSetNeedsDisplay(false);
 
         metalView->setDelegate(this);
-
+        
+        ResourceFreeQueue.resize(MaxFramesInFlight);
+        
+        NS::Window* window = reinterpret_cast<NS::Window*>(glfwGetCocoaWindow(windowHandle));
         window->setContentView(metalView);
-        window->setTitle(NS::String::string(specification.Name.c_str(), NS::StringEncoding::UTF8StringEncoding));
-
+        
+        // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -172,15 +114,86 @@ namespace Walnut {
         auto resourcePath = bundle->resourcePath();
         auto fontPath = resourcePath->stringByAppendingString(NS::String::string("/SF-Mono-Regular.otf", NS::StringEncoding::UTF8StringEncoding));
         io.Fonts->AddFontFromFileTTF(fontPath->utf8String(), 13.0f);
-
-        window->makeKeyAndOrderFront(nullptr);
-
-        NS::Application* app = reinterpret_cast<NS::Application*>(notification->object());
-        app->activateIgnoringOtherApps(true);
+        
+        // Setup Metal / Apple specific stuff
+        autoreleasePool = NS::AutoreleasePool::alloc()->init();
+        commandSemaphore = dispatch_semaphore_create(MaxFramesInFlight);
     }
 
-    bool Application::applicationShouldTerminateAfterLastWindowClosed(NS::Application* sender) {
-        return true;
+    void Application::Shutdown() {
+        for (auto& layer : layerStack) {
+            layer->OnDetach();
+        }
+
+        layerStack.clear();
+        
+        for (auto& queue : ResourceFreeQueue) {
+            for (auto& func : queue) {
+                func();
+            }
+        }
+        
+        ResourceFreeQueue.clear();
+        
+        ImGui_ImplMetal_Shutdown();
+        ImGui_ImplOSX_Shutdown();
+        ImGui::DestroyContext();
+        
+        metalView->release();
+        metalView = nullptr;
+        
+        glfwDestroyWindow(windowHandle);
+        windowHandle = nullptr;
+        
+        glfwTerminate();
+
+        autoreleasePool->release();
+
+        IsApplicationRunning = false;
+    }
+
+    void Application::Run() {
+        isRunning = true;
+        
+        ImVec4 clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        ImGuiIO& io = ImGui::GetIO();
+        
+        // Main loop
+        while (!glfwWindowShouldClose(windowHandle) && isRunning) {
+            // Poll and handle events (inputs, window resize, etc.)
+            // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+            // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+            // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+            // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+            glfwPollEvents();
+            
+            for (auto& layer : layerStack) {
+                layer->OnUpdate(timeStep);
+            }
+            
+            metalView->draw();
+            
+            float time = GetTime();
+            frameTime = time - lastFrameTime;
+            timeStep = glm::min<float>(frameTime, 0.0333f);
+            lastFrameTime = time;
+        }
+    }
+
+    void Application::Close() {
+        isRunning = false;
+    }
+
+    float Application::GetTime() {
+        return (float)glfwGetTime();
+    }
+
+    MTL::Device* Application::GetDevice() {
+        return MetalDevice;
+    }
+
+    void Application::SubmitResourceFree(std::function<void()>&& func) {
+        ResourceFreeQueue[CurrentFrameIndex].emplace_back(func);
     }
 
     void Application::drawableSizeWillChange(MTK::View* view, CGSize size) {

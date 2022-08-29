@@ -19,6 +19,12 @@
 		D18F8695285BDE2900819416 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8CB4B32859189A0016FC5F /* QuartzCore.framework */; };
 		D18F8698285BDE7600819416 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18F8696285BDE7600819416 /* Random.cpp */; };
 		D18F8699285BDE7600819416 /* Random.h in Headers */ = {isa = PBXBuildFile; fileRef = D18F8697285BDE7600819416 /* Random.h */; };
+		DC0984B828BCF87100FF86A4 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC0984B728BCF86600FF86A4 /* libglfw3.a */; };
+		DC0984BA28BCFE0000FF86A4 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC0984B928BCFE0000FF86A4 /* IOKit.framework */; };
+		DC0984BD28BD03EF00FF86A4 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC0984BB28BD03EF00FF86A4 /* Input.cpp */; };
+		DC0984BE28BD03EF00FF86A4 /* Input.h in Headers */ = {isa = PBXBuildFile; fileRef = DC0984BC28BD03EF00FF86A4 /* Input.h */; };
+		DC0984C128BD066900FF86A4 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC0984B728BCF86600FF86A4 /* libglfw3.a */; };
+		DC0984C228BD066E00FF86A4 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC0984B928BCFE0000FF86A4 /* IOKit.framework */; };
 		DC8B6999285B6F1300DB13EF /* MetalCpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8B6998285B6F1300DB13EF /* MetalCpp.cpp */; };
 		DC8CB4942858FC130016FC5F /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8CB4932858FC130016FC5F /* Application.cpp */; };
 		DC8CB496285905E60016FC5F /* WalnutApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC8CB495285905E60016FC5F /* WalnutApp.cpp */; };
@@ -180,6 +186,11 @@
 		D18F8696285BDE7600819416 /* Random.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
 		D18F8697285BDE7600819416 /* Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		D18F869A285BE00C00819416 /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
+		DC0984B728BCF86600FF86A4 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = "Third-Party/glfw/lib-universal/libglfw3.a"; sourceTree = "<group>"; };
+		DC0984B928BCFE0000FF86A4 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		DC0984BB28BD03EF00FF86A4 /* Input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
+		DC0984BC28BD03EF00FF86A4 /* Input.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Input.h; sourceTree = "<group>"; };
+		DC0984BF28BD049000FF86A4 /* KeyCodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyCodes.h; sourceTree = "<group>"; };
 		DC499387287DC07E00115505 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DC8B6998285B6F1300DB13EF /* MetalCpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalCpp.cpp; sourceTree = "<group>"; };
 		DC8CB46D2858D8310016FC5F /* libWalnut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libWalnut.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -230,10 +241,12 @@
 				D18F8690285BDE1800819416 /* libWalnut.a in Frameworks */,
 				D18F868D285BDE0C00819416 /* AppKit.framework in Frameworks */,
 				D18F8695285BDE2900819416 /* QuartzCore.framework in Frameworks */,
+				DC0984C128BD066900FF86A4 /* libglfw3.a in Frameworks */,
 				D18F8693285BDE2000819416 /* Metal.framework in Frameworks */,
 				D18F8694285BDE2400819416 /* MetalKit.framework in Frameworks */,
 				D18F868E285BDE1000819416 /* Foundation.framework in Frameworks */,
 				D18F868F285BDE1500819416 /* GameController.framework in Frameworks */,
+				DC0984C228BD066E00FF86A4 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,10 +264,12 @@
 				DC8CB4B42859189A0016FC5F /* QuartzCore.framework in Frameworks */,
 				DC8CB4B8285919030016FC5F /* GameController.framework in Frameworks */,
 				DC8CB49E285908150016FC5F /* libWalnut.a in Frameworks */,
+				DC0984B828BCF87100FF86A4 /* libglfw3.a in Frameworks */,
 				DC8CB49D285907FE0016FC5F /* MetalKit.framework in Frameworks */,
 				DC8CB4B6285918FC0016FC5F /* AppKit.framework in Frameworks */,
 				DC8CB49C285907FE0016FC5F /* Metal.framework in Frameworks */,
 				DC8CB499285907F60016FC5F /* Foundation.framework in Frameworks */,
+				DC0984BA28BCFE0000FF86A4 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +433,16 @@
 			path = RayTracing;
 			sourceTree = "<group>";
 		};
+		DC0984C028BD059000FF86A4 /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				DC0984BB28BD03EF00FF86A4 /* Input.cpp */,
+				DC0984BC28BD03EF00FF86A4 /* Input.h */,
+				DC0984BF28BD049000FF86A4 /* KeyCodes.h */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
 		DC8CB4622858D80A0016FC5F = {
 			isa = PBXGroup;
 			children = (
@@ -444,6 +469,7 @@
 			isa = PBXGroup;
 			children = (
 				DCEAEAAA28A183A600DC076A /* Fonts */,
+				DC0984C028BD059000FF86A4 /* Input */,
 				DC8CB4932858FC130016FC5F /* Application.cpp */,
 				DC8CB4922858FA8C0016FC5F /* Application.h */,
 				DC8CB4902858F9610016FC5F /* EntryPoint.h */,
@@ -480,6 +506,8 @@
 		DC8CB497285907F50016FC5F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DC0984B928BCFE0000FF86A4 /* IOKit.framework */,
+				DC0984B728BCF86600FF86A4 /* libglfw3.a */,
 				DC8CB4B7285919030016FC5F /* GameController.framework */,
 				DC8CB4B5285918FC0016FC5F /* AppKit.framework */,
 				DC8CB4B32859189A0016FC5F /* QuartzCore.framework */,
@@ -533,6 +561,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC0984BE28BD03EF00FF86A4 /* Input.h in Headers */,
 				D18F8669285BD56F00819416 /* Image.h in Headers */,
 				D18F8699285BDE7600819416 /* Random.h in Headers */,
 			);
@@ -695,6 +724,7 @@
 				DC8CB4A9285918230016FC5F /* imgui_impl_osx.mm in Sources */,
 				DC8CB4B22859187F0016FC5F /* imgui_widgets.cpp in Sources */,
 				DC8CB4B02859187F0016FC5F /* imgui_draw.cpp in Sources */,
+				DC0984BD28BD03EF00FF86A4 /* Input.cpp in Sources */,
 				DC8CB4A8285918200016FC5F /* imgui_impl_metal.mm in Sources */,
 				D18F8698285BDE7600819416 /* Random.cpp in Sources */,
 				DC8CB4B12859187F0016FC5F /* imgui_demo.cpp in Sources */,
@@ -801,6 +831,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Third-Party/glfw/lib-universal",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -881,6 +915,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Third-Party/glfw/lib-universal",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -960,6 +998,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Third-Party/glfw/include",
 					"$(SRCROOT)/Third-Party/glm",
 					"$(SRCROOT)/Third-Party/imgui",
 					"$(SRCROOT)/Third-Party/metal-cpp",
@@ -1028,6 +1067,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Third-Party/glfw/include",
 					"$(SRCROOT)/Third-Party/glm",
 					"$(SRCROOT)/Third-Party/imgui",
 					"$(SRCROOT)/Third-Party/metal-cpp",
@@ -1115,6 +1155,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Third-Party/glfw/lib-universal",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -1192,6 +1236,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Third-Party/glfw/lib-universal",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;

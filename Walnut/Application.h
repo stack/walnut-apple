@@ -18,6 +18,8 @@
 #include <AppKit/AppKit.hpp>
 #include <MetalKit/MetalKit.hpp>
 
+struct GLFWwindow;
+
 namespace Walnut {
 
     struct ApplicationSpecification {
@@ -26,14 +28,14 @@ namespace Walnut {
         uint32_t Height = 900;
     };
 
-    class Application : public NS::ApplicationDelegate, public MTK::ViewDelegate {
+    class Application : public MTK::ViewDelegate {
 
     public:
         // Application Methods
         Application(const ApplicationSpecification& applicationSpecification);
         ~Application();
         
-        static MTL::Device* GetDevice();
+        static Application& Get();
 
         void Run();
         void SetMenubarCallback(const std::function<void()>& callback) { menubarCallback = callback; }
@@ -47,13 +49,13 @@ namespace Walnut {
         void PushLayer(const std::shared_ptr<Layer>& layer) { layerStack.emplace_back(layer); layer->OnAttach(); }
 
         void Close();
+        
+        float GetTime();
+        GLFWwindow* GetWindowHandle() const { return windowHandle; }
+        
+        static MTL::Device* GetDevice();
 
         static void SubmitResourceFree(std::function<void()>&& func);
-
-        // ApplicationDelegate Protocol
-        virtual void applicationWillFinishLaunching(NS::Notification* notification) override;
-        virtual void applicationDidFinishLaunching(NS::Notification* notification) override;
-        virtual bool applicationShouldTerminateAfterLastWindowClosed(NS::Application* sender) override;
 
         // MTKViewDelegate Protocol
         virtual void drawableSizeWillChange(MTK::View* view, CGSize size) override;
@@ -64,19 +66,21 @@ namespace Walnut {
         void Init();
         void Shutdown();
 
-        // ApplicationDelegate Protocol
-        NS::Menu* CreateMenuBar();
-
     private:
 
         ApplicationSpecification specification;
-
+        GLFWwindow *windowHandle;
+        bool isRunning;
+        
+        float timeStep = 0.0f;
+        float frameTime = 0.0f;
+        float lastFrameTime = 0.0f;
+        
         NS::AutoreleasePool* autoreleasePool;
 
         std::vector<std::shared_ptr<Layer>> layerStack;
         std::function<void()> menubarCallback;
 
-        NS::Window* window;
         MTK::View* metalView;
         CGSize viewSize;
         
