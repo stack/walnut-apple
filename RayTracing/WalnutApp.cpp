@@ -9,6 +9,8 @@
 #include <Walnut/EntryPoint.h>
 #include <Walnut/Timer.h>
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <imgui.h>
 
 #include "Camera.h"
@@ -23,7 +25,23 @@ public:
     ExampleLayer() :
         camera(45.0f, 0.1f, 100.0f)
     {
+        {
+            Sphere sphere;
+            sphere.position = { 0.0f, 0.0f, 0.0f };
+            sphere.radius = 0.5f;
+            sphere.albedo = { 1.0f, 0.0f, 1.0f };
+            
+            scene.spheres.push_back(sphere);
+        }
         
+        {
+            Sphere sphere;
+            sphere.position = { 1.0f, 0.0f, -5.0f };
+            sphere.radius = 1.5f;
+            sphere.albedo = { 0.2f, 0.3f, 1.0f };
+            
+            scene.spheres.push_back(sphere);
+        }
     }
     
     virtual void OnUpdate(float ts) override {
@@ -57,10 +75,25 @@ public:
         
         ImGui::Separator();
         
-        ImGuiColorEditFlags pickerFlags = ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_Float;
-        ImGui::ColorPicker3("Sphere Color", (float *)&(renderer.sphereColor), pickerFlags);
-        
         ImGui::SliderFloat3("Light Direction", (float *)&(renderer.lightDirection), -1.0f, 1.0f, "%0.01f");
+        
+        ImGui::End();
+        
+        ImGui::Begin("Scene");
+        
+        for (size_t i = 0; i < scene.spheres.size(); i++) {
+            ImGui::PushID(static_cast<int>(i));
+            
+            Sphere& sphere = scene.spheres[i];
+            
+            ImGui::DragFloat3("Position", glm::value_ptr(sphere.position), 0.1f);
+            ImGui::DragFloat("Radius", &sphere.radius, 0.1f);
+            ImGui::ColorEdit3("Albedo", glm::value_ptr(sphere.albedo));
+            
+            ImGui::Separator();
+            
+            ImGui::PopID();
+        }
         
         ImGui::End();
         
@@ -73,7 +106,7 @@ public:
         camera.OnResize(viewportWidth, viewportHeight);
         renderer.OnResize(viewportWidth, viewportHeight);
         
-        renderer.Render(camera);
+        renderer.Render(scene, camera);
         
         lastRenderTime = timer.ElapsedMillis();
     }
@@ -81,6 +114,7 @@ public:
 private:
     Camera camera;
     Renderer renderer;
+    Scene scene;
     uint32_t viewportWidth = 0, viewportHeight = 0;
     
     float lastRenderTime = 0.0f;

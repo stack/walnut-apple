@@ -37,7 +37,7 @@ void Renderer::OnResize(uint32_t width, uint32_t height) {
     }
 }
 
-void Renderer::Render(const Camera& camera) {
+void Renderer::Render(const Scene& scene, const Camera& camera) {
     Ray ray;
     ray.origin = camera.GetPosition();
     
@@ -45,7 +45,7 @@ void Renderer::Render(const Camera& camera) {
         for (uint32_t x = 0; x < finalImage->GetWidth(); x++) {
             ray.direction = camera.GetRayDirections()[x + y * finalImage->GetWidth()];
 
-            glm::vec4 color = TraceRay(ray);
+            glm::vec4 color = TraceRay(scene, ray);
             color = glm::clamp(color, glm::vec4(0.0f), glm::vec4(1.0f));
             
             imageData[(y * finalImage->GetWidth()) + x] = Utils::ConvertToRGBA(color);
@@ -55,45 +55,64 @@ void Renderer::Render(const Camera& camera) {
     finalImage->SetData(imageData);
 }
 
-glm::vec4 Renderer::TraceRay(const Ray& ray) {
-    glm::vec3 sphereOrigin(0.0f, 0.0f, 0.0f);
-    float radius = 0.5;
-
-    // (bx^2 + by^2 + bz^2)t^2 + (2(axbx + ayby + azbz))t + (ax^2 + ay^2 + az^2 - r^2) = 0]
-    // where
-    // a = ray origin
-    // b = ray direction
-    // r = radius
-    // t = hit distance
-
-    // NOTE: a, b, & c are the quadratic variables, not the ones mentioned above. These are the coefficients above
-
-    // float a = rayDirection.x * rayDirection.x + rayDirection.y * rayDirection.y + rayDirection.z * rayDirection.z;
-    float a = glm::dot(ray.direction, ray.direction);
-
-    // float b = 2.0f * (rayOrigin.x * rayDirection.x + rayOrigin.y * rayDirection.y + rayOrigin.z * rayDirection.z);
-    float b = 2.0f * glm::dot(ray.origin, ray.direction);
-
-    // float c = rayOrigin.x * rayOrigin.x + rayOrigin.y * rayOrigin.y * rayOrigin.z * rayOrigin.z - radius * radius;
-    float c = glm::dot(ray.origin, ray.origin) - radius * radius;
-
-    // Quadratic formula discriminant
-    // b^2 - 4ac
-    float discriminant = b * b - 4.0f * a * c;
-
-    // No hit, so exit early
-    if (discriminant < 0.0f) {
-        return glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); // RGBA
+glm::vec4 Renderer::TraceRay(const Scene& scene, const Ray& ray) {
+    // Do nothing on an empty scene
+    if (scene.spheres.empty()) {
+        return glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
     
-    // Full quadratic equation
-    // (-b +- sqrt(discriminant)) / (2.0f * a)
-    // float t0 = (-b + glm::sqrt(discriminant)) / (2.0f * a);
-    // float t1 = (-b - glm::sqrt(discriminant)) / (2.0f * a);
-    float closestT = (-b - glm::sqrt(discriminant)) / (2.0f * a);
+    const Sphere* closestSphere = nullptr;
+    float hitDistance = std::numeric_limits<float>::max();
     
-    glm::vec3 hitPoint = ray.origin + ray.direction * closestT;
-    glm::vec3 normal = glm::normalize(hitPoint - sphereOrigin);
+    for (const Sphere& sphere : scene.spheres) {
+        // (bx^2 + by^2 + bz^2)t^2 + (2(axbx + ayby + azbz))t + (ax^2 + ay^2 + az^2 - r^2) = 0]
+        // where
+        // a = ray origin
+        // b = ray direction
+        // r = radius
+        // t = hit distance
+
+        // NOTE: a, b, & c are the quadratic variables, not the ones mentioned above. These are the coefficients above
+
+        glm::vec3 origin = ray.origin - sphere.position;
+        
+        // float a = rayDirection.x * rayDirection.x + rayDirection.y * rayDirection.y + rayDirection.z * rayDirection.z;
+        float a = glm::dot(ray.direction, ray.direction);
+
+        // float b = 2.0f * (rayOrigin.x * rayDirection.x + rayOrigin.y * rayDirection.y + rayOrigin.z * rayDirection.z);
+        float b = 2.0f * glm::dot(origin, ray.direction);
+
+        // float c = rayOrigin.x * rayOrigin.x + rayOrigin.y * rayOrigin.y * rayOrigin.z * rayOrigin.z - radius * radius;
+        float c = glm::dot(origin, origin) - sphere.radius * sphere.radius;
+
+        // Quadratic formula discriminant
+        // b^2 - 4ac
+        float discriminant = b * b - 4.0f * a * c;
+
+        // No hit, so go to the next sphere
+        if (discriminant < 0.0f) {
+            continue;
+        }
+        
+        // Full quadratic equation
+        // (-b +- sqrt(discriminant)) / (2.0f * a)
+        // float t0 = (-b + glm::sqrt(discriminant)) / (2.0f * a);
+        // float t1 = (-b - glm::sqrt(discriminant)) / (2.0f * a);
+        float closestT = (-b - glm::sqrt(discriminant)) / (2.0f * a);
+        
+        if (closestT < hitDistance) {
+            closestSphere = &sphere;
+            hitDistance = closestT;
+        }
+    }
+    
+    if (closestSphere == nullptr) {
+        return glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+    
+    glm::vec3 origin = ray.origin - closestSphere->position;
+    glm::vec3 hitPoint = origin + ray.direction * hitDistance;
+    glm::vec3 normal = glm::normalize(hitPoint);
     
     glm::vec3 lightDirection(this->lightDirection[0], this->lightDirection[1], this->lightDirection[2]);
     lightDirection = glm::normalize(lightDirection);
@@ -101,7 +120,7 @@ glm::vec4 Renderer::TraceRay(const Ray& ray) {
     float dot = glm::dot(normal, -lightDirection); // == cos(angle) because both parameters are unit vectors
     float intensity = glm::max(dot, 0.0f);
     
-    glm::vec3 sphereColor(this->sphereColor[0], this->sphereColor[1], this->sphereColor[2]);
+    glm::vec3 sphereColor = closestSphere->albedo;
     sphereColor *= intensity;
     
     return glm::vec4(sphereColor, 1.0f); // RGBA
