@@ -17,5 +17,12 @@ void AddViewToWindow(void* _Nonnull view, void* _Nonnull window) {
 }
 
 void AddViewToWindowEx(NSView* view, NSWindow* window) {
+    view.translatesAutoresizingMaskIntoConstraints = false;
+    
     [window.contentView addSubview:view];
+    
+    [view.leadingAnchor constraintEqualToAnchor:window.contentView.leadingAnchor].active = YES;
+    [view.trailingAnchor constraintEqualToAnchor:window.contentView.trailingAnchor].active = YES;
+    [view.topAnchor constraintEqualToAnchor:window.contentView.topAnchor].active = YES;
+    [view.bottomAnchor constraintEqualToAnchor:window.contentView.bottomAnchor].active = YES;
 }
