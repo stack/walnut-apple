@@ -159,9 +159,6 @@ namespace Walnut {
     void Application::Run() {
         isRunning = true;
         
-        ImVec4 clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-        ImGuiIO& io = ImGui::GetIO();
-        
         // Main loop
         while (!glfwWindowShouldClose(windowHandle) && isRunning) {
             // Poll and handle events (inputs, window resize, etc.)
