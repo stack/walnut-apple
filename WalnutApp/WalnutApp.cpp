@@ -26,6 +26,7 @@ public:
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv) {
     Walnut::ApplicationSpecification spec;
     spec.Name = "Walnut Example";
+    spec.Namespace = "us.gerstacker.walnut.example";
 
     Walnut::Application* app = new Walnut::Application(spec);
     app->PushLayer<ExampleLayer>();

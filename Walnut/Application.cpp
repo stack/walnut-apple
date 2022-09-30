@@ -23,6 +23,7 @@
 
 #include "Utilities.h"
 
+#include <cstring>
 #include <iostream>
 
 extern bool IsApplicationRunning;
@@ -102,6 +103,9 @@ namespace Walnut {
         // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        
+        std::string iniPath = GetIniPath(specification.Namespace);
+        io.IniFilename = strdup(iniPath.c_str());
 
         ImGui::StyleColorsDark();
 
