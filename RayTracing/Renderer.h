@@ -30,13 +30,27 @@ public:
     
 public:
     
-    float lightDirection[3] = { -1.0f, -1.0f, -1.0f } ;
+    glm::vec3 lightDirection { -1.0f, -1.0f, -1.0f };
 
 private:
+    
+    struct HitPayload {
+        float hitDistance;
+        glm::vec3 worldPosition;
+        glm::vec3 worldNormal;
+        
+        int objectIndex;
+    };
 
-    glm::vec4 TraceRay(const Scene& scene, const Ray& ray);
+    glm::vec4 PerPixel(uint32_t x, uint32_t y); // RayGen
+    
+    HitPayload TraceRay(const Ray& ray);
+    HitPayload ClosestHit(const Ray& ray, float hitDistance, int objectIndex);
+    HitPayload Miss(const Ray& ray);
 
 private:
+    const Scene* activeScene = nullptr;
+    const Camera* activeCamera = nullptr;
 
     std::shared_ptr<Walnut::Image> finalImage;
     uint32_t* imageData = nullptr;

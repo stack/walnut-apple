@@ -75,7 +75,7 @@ public:
         
         ImGui::Separator();
         
-        ImGui::SliderFloat3("Light Direction", (float *)&(renderer.lightDirection), -1.0f, 1.0f, "%0.01f");
+        ImGui::DragFloat3("Light Direction", glm::value_ptr(renderer.lightDirection), 0.1f);
         
         ImGui::End();
         
