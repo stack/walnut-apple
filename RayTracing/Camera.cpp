@@ -21,7 +21,7 @@ Camera::Camera(float verticalFOV, float nearClip, float farClip) :
     farClip(farClip)
 {
     forwardDirection = glm::vec3(0, 0, -1);
-    position = glm::vec3(0, 0, 3);
+    position = glm::vec3(0, 0, 6);
 }
 
 void Camera::OnUpdate(float ts) {

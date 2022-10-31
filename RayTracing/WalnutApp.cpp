@@ -25,20 +25,28 @@ public:
     ExampleLayer() :
         camera(45.0f, 0.1f, 100.0f)
     {
+        Material& pinkSphere = scene.materials.emplace_back();
+        pinkSphere.albedo = { 1.0f, 0.0f, 1.0f };
+        pinkSphere.roughness = 0.0f;
+        
+        Material& blueSphere = scene.materials.emplace_back();
+        blueSphere.albedo = { 0.2f, 0.3f, 1.0f };
+        blueSphere.roughness = 0.1f;
+        
         {
             Sphere sphere;
             sphere.position = { 0.0f, 0.0f, 0.0f };
-            sphere.radius = 0.5f;
-            sphere.albedo = { 1.0f, 0.0f, 1.0f };
+            sphere.radius = 1.0f;
+            sphere.materialIndex = 0;
             
             scene.spheres.push_back(sphere);
         }
         
         {
             Sphere sphere;
-            sphere.position = { 1.0f, 0.0f, -5.0f };
-            sphere.radius = 1.5f;
-            sphere.albedo = { 0.2f, 0.3f, 1.0f };
+            sphere.position = { 0.0f, -101.0f, -0.0f };
+            sphere.radius = 100.0f;
+            sphere.materialIndex = 1;
             
             scene.spheres.push_back(sphere);
         }
@@ -88,7 +96,21 @@ public:
             
             ImGui::DragFloat3("Position", glm::value_ptr(sphere.position), 0.1f);
             ImGui::DragFloat("Radius", &sphere.radius, 0.1f);
-            ImGui::ColorEdit3("Albedo", glm::value_ptr(sphere.albedo));
+            ImGui::DragInt("Material", &sphere.materialIndex, 1.0f, 0, static_cast<int>(scene.materials.size() - 1));
+            
+            ImGui::Separator();
+            
+            ImGui::PopID();
+        }
+        
+        for (size_t i = 0; i < scene.materials.size(); i++) {
+            ImGui::PushID(static_cast<int>(i));
+            
+            Material& material = scene.materials[i];
+            
+            ImGui::ColorEdit3("Albedo", glm::value_ptr(material.albedo));
+            ImGui::DragFloat("Roughness", &material.roughness, 0.05f, 0.0f, 1.0f);
+            ImGui::DragFloat("Metallic", &material.metallic, 0.05f, 0.0f, 1.0f);
             
             ImGui::Separator();
             
