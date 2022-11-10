@@ -53,7 +53,11 @@ public:
     }
     
     virtual void OnUpdate(float ts) override {
-        camera.OnUpdate(ts);
+        bool moved = camera.OnUpdate(ts);
+        
+        if (moved) {
+            renderer.ResetFrameIndex();
+        }
     }
     
     virtual void OnUIRender() override {
@@ -80,6 +84,16 @@ public:
         ImGui::Begin("Settings");
         ImGui::Text("Last render: %.3fms", lastRenderTime);
         ImGui::Text("Viewport: %ux%u", viewportWidth, viewportHeight);
+        
+        if (ImGui::Button("Render")) {
+            Render();
+        }
+        
+        ImGui::Checkbox("Accumulate?", &renderer.GetSettings().accumulate);
+        
+        if (ImGui::Button("Reset")) {
+            renderer.ResetFrameIndex();
+        }
         
         ImGui::Separator();
         

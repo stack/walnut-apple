@@ -26,33 +26,50 @@ namespace Utils {
 void Renderer::OnResize(uint32_t width, uint32_t height) {
     if (finalImage == nullptr) {
         finalImage = std::make_shared<Walnut::Image>(width, height, Walnut::ImageFormat::RGBA);
-        imageData = new uint32_t[width * height];
     } else {
-        if (finalImage->GetWidth() != width || finalImage->GetHeight() != height) {
-            finalImage->Resize(width, height);
-
-            delete[] imageData;
-            imageData = new uint32_t[width * height];
+        if (finalImage->GetWidth() == width && finalImage->GetHeight() == height) {
+            return;
         }
+        
+        finalImage->Resize(width, height);
     }
+    
+    delete[] imageData;
+    imageData = new uint32_t[width * height];
+    
+    delete[] accumulationData;
+    accumulationData = new glm::vec4[width * height];
 }
 
 void Renderer::Render(const Scene& scene, const Camera& camera) {
     activeScene = &scene;
     activeCamera = &camera;
     
+    if (frameIndex == 1) {
+        memset(accumulationData, 0, finalImage->GetWidth() * finalImage->GetHeight() * sizeof(glm::vec4));
+    }
+    
     for (uint32_t y = 0; y < finalImage->GetHeight(); y++) {
         for (uint32_t x = 0; x < finalImage->GetWidth(); x++) {
-            
-
             glm::vec4 color = PerPixel(x, y);
-            color = glm::clamp(color, glm::vec4(0.0f), glm::vec4(1.0f));
+            accumulationData[(y * finalImage->GetWidth()) + x] += color;
             
-            imageData[(y * finalImage->GetWidth()) + x] = Utils::ConvertToRGBA(color);
+            glm::vec4 accumulatedColor = accumulationData[(y * finalImage->GetWidth()) + x];
+            accumulatedColor /= static_cast<float>(frameIndex);
+            
+            accumulatedColor = glm::clamp(accumulatedColor, glm::vec4(0.0f), glm::vec4(1.0f));
+
+            imageData[(y * finalImage->GetWidth()) + x] = Utils::ConvertToRGBA(accumulatedColor);
         }
     }
 
     finalImage->SetData(imageData);
+    
+    if (settings.accumulate) {
+        frameIndex += 1;
+    } else {
+        frameIndex = 1;
+    }
 }
 
 glm::vec4 Renderer::PerPixel(uint32_t x, uint32_t y) {
