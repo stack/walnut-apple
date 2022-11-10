@@ -39,6 +39,8 @@ void Renderer::OnResize(uint32_t width, uint32_t height) {
     
     delete[] accumulationData;
     accumulationData = new glm::vec4[width * height];
+    
+    frameIndex = 1;
 }
 
 void Renderer::Render(const Scene& scene, const Camera& camera) {
