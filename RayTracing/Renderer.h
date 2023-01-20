@@ -66,6 +66,9 @@ private:
     uint32_t* imageData = nullptr;
     Settings settings;
     
+    std::vector<uint32_t> imageHorizontalIterator;
+    std::vector<uint32_t> imageVerticalIterator;
+    
     glm::vec4* accumulationData = nullptr;
     
     uint32_t frameIndex = 1;

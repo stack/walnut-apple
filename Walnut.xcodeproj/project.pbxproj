@@ -937,6 +937,7 @@
 					"$(SRCROOT)/Third-Party/glm",
 					"$(SRCROOT)/Third-Party/imgui",
 					"$(SRCROOT)/Third-Party/metal-cpp",
+					"$(SRCROOT)/Third-Party/pstld",
 					"$(SRCROOT)/Third-Party/metal-cpp-extensions",
 				);
 				INFOPLIST_FILE = RayTracing/Info.plist;
@@ -1020,6 +1021,7 @@
 					"$(SRCROOT)/Third-Party/glm",
 					"$(SRCROOT)/Third-Party/imgui",
 					"$(SRCROOT)/Third-Party/metal-cpp",
+					"$(SRCROOT)/Third-Party/pstld",
 					"$(SRCROOT)/Third-Party/metal-cpp-extensions",
 				);
 				INFOPLIST_FILE = RayTracing/Info.plist;
